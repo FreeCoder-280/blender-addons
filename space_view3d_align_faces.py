@@ -5,12 +5,19 @@ from functools import reduce
 
 bl_info = {
     "name": "Align by faces",
-    "author": "Tom Rethaller",
-    "version": (0,2,2),
-    "blender": (2, 65, 0),
     "description": "Align two objects by their active faces",
+    "author": "Tom Rethaller (branch GUI & Blender 2.8 by FreeCoder-280)",
+    "version": (0,3,0),
+    "blender": (2, 80, 2),
+    "location": "3D View > UI",
     "warning": "",
-    "category": "3D View"}
+    "category": "Mesh",
+    "wiki_url": "https://archive.blender.org/wiki/index.php/Extensions:2.6/Py/Scripts/3D_interaction/Align_by_faces/",
+    "tracker_url": "https://github.com/trethaller/blender-addons",
+#    "support": "TESTING",	# "Testing" may hide the AddOn; defaults to "Community"
+}
+
+classes = []
 
 def get_ortho(a,b,c):
     if c != 0.0 and -a != b:
@@ -32,27 +39,28 @@ def align_faces(from_obj, to_obj):
     tpoly = tpolys[tpolys.active]
     
     to_obj.rotation_mode = 'QUATERNION'
-    tnorm = to_obj.rotation_quaternion * tpoly.normal
+    tnorm = to_obj.rotation_quaternion @ tpoly.normal
     
     fnorm = fpoly.normal
     axis = fnorm.cross(tnorm)
     dot = fnorm.normalized().dot(tnorm.normalized())
     dot = clamp(dot, -1.0, 1.0)
     
-    # Parallel faces need a new rotation vactor
+    # Parallel faces need a new rotation vector
     if axis.length < 1.0e-8:
         axis = Vector(get_ortho(fnorm.x, fnorm.y, fnorm.z))
         
     from_obj.rotation_mode = 'AXIS_ANGLE'
     from_obj.rotation_axis_angle = [math.acos(dot) + math.pi, axis[0],axis[1],axis[2]]
-    bpy.context.scene.update()  
+    dg = bpy.context.evaluated_depsgraph_get()
+    dg.update()     
     
     # Move from_obj so that faces match
     fvertices = [from_obj.data.vertices[i].co for i in fpoly.vertices]
     tvertices = [to_obj.data.vertices[i].co for i in tpoly.vertices]
     
-    fbary = from_obj.matrix_world * (reduce(Vector.__add__, fvertices) / len(fvertices))
-    tbary = to_obj.matrix_world * (reduce(Vector.__add__, tvertices) / len(tvertices))
+    fbary = from_obj.matrix_world @ (reduce(Vector.__add__, fvertices) / len(fvertices))
+    tbary = to_obj.matrix_world @ (reduce(Vector.__add__, tvertices) / len(tvertices))
     
     from_obj.location = tbary - (fbary - from_obj.location)
 
@@ -74,12 +82,60 @@ class OBJECT_OT_AlignByFaces(bpy.types.Operator):
     def execute(self, context):
         objs_to_move = [o for o in context.selected_objects if o != context.active_object]
         for o in objs_to_move:
-        	align_faces(o, context.active_object)
+            align_faces(o, context.active_object)
         return {'FINISHED'}
+# end class
+classes += [OBJECT_OT_AlignByFaces]
+
+# Panel
+class OBJECT_PT_PreviewsPanel(bpy.types.Panel):
+    bl_category = "Align"
+    bl_label = "Align by Face"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = "UI"
+
+    def draw(self, context):
+        layout = self.layout
+
+        # Usage Info
+        col = layout.column(align=True)
+        rowsub = col.row(align=True)    
+        rowsub.label(text="Workflow:")
+        rowsub = col.row(align=True)    
+        rowsub.label(text="- Select face on objA in editmode")
+        rowsub = col.row(align=True)    
+        rowsub.label(text="- Select face on objB in editmode")
+        rowsub = col.row(align=True)    
+        rowsub.label(text="- Select objA and objB in objectmode")
+        rowsub = col.row(align=True)    
+        rowsub.label(text="(objA will be moved to objB)")
+
+        # Button only enabled if two mesh object are selected (TODO: further checks)
+        check_enabled = True
+        if not len(context.selected_objects) is 2:
+            check_enabled = False
+        for obj in context.selected_objects:
+            if obj.type != 'MESH':
+                check_enabled = False
+         # Button for the action
+        rowsub = col.row(align=True)
+        rowsub.operator("object.align_by_faces", icon="SNAP_ON", text="FaceToFace ObjA to ObjB")
+        rowsub.enabled = check_enabled 
+
+# end class
+classes += [OBJECT_PT_PreviewsPanel]
 
 def register():
-    bpy.utils.register_module(__name__)
+    from bpy.utils import register_class
+
+    for cls in classes:
+         register_class(cls)
 
 def unregister():
-    bpy.utils.unregister_module(__name__)
+    from bpy.utils import unregister_class
 
+    for cls in reversed(classes):
+         unregister_class(cls)
+
+if __name__ == "__main__":
+    register()
