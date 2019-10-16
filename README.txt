@@ -11,7 +11,8 @@ Install "space_view3d_align_faces.py" (Blender 2.8: Edit - Preferences - Add-ons
 
 Enable the just installed Add-on "Mesh: Align by faces" (check it active)
 
-The "Align" tab contains the "Align by Face" region
+The "Align" tab at "3D_View > UI" contains the "Align by Face" region.
+Push "N" at your keyboard while in "3D View" to open the UI with "Item", "Tool", "View", ..., -> "Align" <-
 
 - "Workflow:" contains the same steps as the Master script
   => Editmode: Choose one face in each of your objects you want to snap (align) together.
