@@ -4,8 +4,8 @@
 # Branch by (FreeCoder-280 :-)
 #----------------------------------------------------------------------------
 
-Fork (Blender2.8+UI)
-----
+Branch (Blender2.8+UI)
+------
 
 Install "space_view3d_align_faces.py" (Edit - Preferences - Add-ons - Install...)
 
