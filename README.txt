@@ -7,9 +7,9 @@
 Branch (Blender2.8+UI)
 ------
 
-Install "space_view3d_align_faces.py" (Edit - Preferences - Add-ons - Install...)
+Install "space_view3d_align_faces.py" (Blender 2.8: Edit - Preferences - Add-ons - Install...)
 
-Enable the just installed Add-on "Mesh: Align by faces" (mark it active)
+Enable the just installed Add-on "Mesh: Align by faces" (check it active)
 
 The "Align" tab contains the "Align by Face" region
 
