@@ -3,7 +3,9 @@
 # Master by Tom Rethaller (https://github.com/trethaller/blender-addons)
 # Branch by FreeCoder-280 (:-)
 #
-# License: The Unlicense (http://unlicense.org)
+# License: CC0 1.0 Universal,
+#          see <http://creativecommons.org/publicdomain/zero/1.0/>
+#          or  LICENSE.md
 #----------------------------------------------------------------------------
 
 Branch (Blender2.8+UI)
