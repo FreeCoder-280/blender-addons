@@ -2,6 +2,8 @@
 #
 # Master by Tom Rethaller (https://github.com/trethaller/blender-addons)
 # Branch by (FreeCoder-280 :-)
+#
+# License: The Unlicense (http://unlicense.org)
 #----------------------------------------------------------------------------
 
 Branch (Blender2.8+UI)
@@ -49,3 +51,4 @@ Workflow:
 
 Result: A is moved and aligned on B, the two faces matching perfectly 
 Category: Script (no GUI)
+Source: https://archive.blender.org/wiki/index.php/Extensions:2.6/Py/Scripts/3D_interaction/Align_by_faces/
