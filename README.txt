@@ -1,7 +1,7 @@
 # blender-addons
 #
 # Master by Tom Rethaller (https://github.com/trethaller/blender-addons)
-# Branch by (FreeCoder-280 :-)
+# Branch by FreeCoder-280 (:-)
 #
 # License: The Unlicense (http://unlicense.org)
 #----------------------------------------------------------------------------
