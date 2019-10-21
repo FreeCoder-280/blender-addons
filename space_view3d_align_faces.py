@@ -110,7 +110,7 @@ class OBJECT_PT_PreviewsPanel(bpy.types.Panel):
         rowsub = col.row(align=True)    
         rowsub.label(text="(objA will be moved to objB)")
 
-        # Button only enabled if two mesh object are selected (TODO: further checks)
+        # Button only enabled if two mesh object are selected
         check_enabled = True
         if not len(context.selected_objects) is 2:
             check_enabled = False
